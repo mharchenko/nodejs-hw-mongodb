@@ -1,17 +1,19 @@
 import { Router } from 'express';
-import { getAllContacts, getContactById } from '../services/contacts.js';
+import {
+  getAllContacts,
+  getContactById,
+  createContact,
+  updateContact,
+  deleteContact,
+} from '../controllers/contacts.js';
+import ctrlWrapper from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const response = await getAllContacts();
-  res.status(response.status).json(response);
-});
-
-router.get('/:contactId', async (req, res) => {
-  const { contactId } = req.params;
-  const response = await getContactById(contactId);
-  res.status(response.status).json(response);
-});
+router.get('/', ctrlWrapper(getAllContacts));
+router.get('/:contactId', ctrlWrapper(getContactById));
+router.post('/', ctrlWrapper(createContact));
+router.patch('/:contactId', ctrlWrapper(updateContact));
+router.delete('/:contactId', ctrlWrapper(deleteContact));
 
 export default router;
