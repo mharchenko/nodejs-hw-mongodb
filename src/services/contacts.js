@@ -1,33 +1,51 @@
 import Contact from '../models/contact.js';
 import createError from 'http-errors';
 
-export const getAllContactsService = async () => {
-  const contacts = await Contact.find();
+export const getAllContactsService = async (query) => {
+  const {
+    page = 1,
+    perPage = 10,
+    sortBy = 'name',
+    sortOrder = 'asc',
+    type,
+    isFavourite,
+  } = query;
+  const filter = {};
+
+  if (type) filter.contactType = type;
+  if (isFavourite !== undefined) filter.isFavourite = isFavourite === 'true';
+
+  const totalItems = await Contact.countDocuments(filter);
+  const totalPages = Math.ceil(totalItems / perPage);
+  const hasPreviousPage = page > 1;
+  const hasNextPage = page < totalPages;
+
+  const contacts = await Contact.find(filter)
+    .sort({ [sortBy]: sortOrder === 'desc' ? -1 : 1 })
+    .skip((page - 1) * perPage)
+    .limit(Number(perPage));
+
   return {
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: contacts,
+    data: {
+      data: contacts,
+      page: Number(page),
+      perPage: Number(perPage),
+      totalItems,
+      totalPages,
+      hasPreviousPage,
+      hasNextPage,
+    },
   };
 };
 
 export const getContactByIdService = async (contactId) => {
   const contact = await Contact.findById(contactId);
   if (!contact) throw createError(404, 'Contact not found');
-
-  return {
-    status: 200,
-    message: `Successfully found contact with id ${contactId}!`,
-    data: contact,
-  };
+  return contact;
 };
 
 export const createContactService = async (data) => {
-  const newContact = await Contact.create(data);
-  return {
-    status: 201,
-    message: 'Successfully created a contact!',
-    data: newContact,
-  };
+  return await Contact.create(data);
 };
 
 export const updateContactService = async (contactId, data) => {
@@ -35,17 +53,11 @@ export const updateContactService = async (contactId, data) => {
     new: true,
   });
   if (!updatedContact) throw createError(404, 'Contact not found');
-
-  return {
-    status: 200,
-    message: 'Successfully patched a contact!',
-    data: updatedContact,
-  };
+  return updatedContact;
 };
 
 export const deleteContactService = async (contactId) => {
   const deletedContact = await Contact.findByIdAndDelete(contactId);
   if (!deletedContact) throw createError(404, 'Contact not found');
-
-  return { status: 204 };
+  return deletedContact;
 };
