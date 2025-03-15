@@ -1,4 +1,3 @@
-import createError from 'http-errors';
 import {
   getAllContactsService,
   getContactByIdService,
@@ -8,29 +7,45 @@ import {
 } from '../services/contacts.js';
 
 export const getAllContacts = async (req, res) => {
-  const response = await getAllContactsService();
-  res.status(response.status).json(response);
+  const response = await getAllContactsService(req.query);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: response.data,
+  });
 };
 
 export const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const response = await getContactByIdService(contactId);
-  res.status(response.status).json(response);
+  const contact = await getContactByIdService(contactId);
+  res.status(200).json({
+    status: 200,
+    message: `Successfully found contact with id ${contactId}!`,
+    data: contact,
+  });
 };
 
 export const createContact = async (req, res) => {
-  const response = await createContactService(req.body);
-  res.status(response.status).json(response);
+  const newContact = await createContactService(req.body);
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: newContact,
+  });
 };
 
 export const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const response = await updateContactService(contactId, req.body);
-  res.status(response.status).json(response);
+  const updatedContact = await updateContactService(contactId, req.body);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: updatedContact,
+  });
 };
 
 export const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const response = await deleteContactService(contactId);
-  res.status(response.status).json(response);
+  await deleteContactService(contactId);
+  res.status(204).send();
 };
