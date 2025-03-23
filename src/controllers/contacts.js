@@ -7,7 +7,8 @@ import {
 } from '../services/contacts.js';
 
 export const getAllContacts = async (req, res) => {
-  const response = await getAllContactsService(req.query);
+  // const response = await getAllContactsService(req.query);
+  const response = await getAllContactsService(req.user.id, req.query);
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -17,7 +18,9 @@ export const getAllContacts = async (req, res) => {
 
 export const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactByIdService(contactId);
+  // const contact = await getContactByIdService(contactId);
+  // console.log('Controller req.user:', req.user);
+  const contact = await getContactByIdService(contactId, req.user.id);
   res.status(200).json({
     status: 200,
     message: `Successfully found contact with id ${contactId}!`,
@@ -26,7 +29,10 @@ export const getContactById = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  const newContact = await createContactService(req.body);
+  // const newContact = await createContactService(req.body);
+  // console.log('Controller req.user:', req.user);
+  // console.log('Controller req.user._id:', req.user.id);
+  const newContact = await createContactService(req.body, req.user.id);
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
@@ -36,7 +42,12 @@ export const createContact = async (req, res) => {
 
 export const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const updatedContact = await updateContactService(contactId, req.body);
+  // const updatedContact = await updateContactService(contactId, req.body);
+  const updatedContact = await updateContactService(
+    contactId,
+    req.user.id,
+    req.body,
+  );
   res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',
@@ -46,6 +57,7 @@ export const updateContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  await deleteContactService(contactId);
+  // await deleteContactService(contactId);
+  await deleteContactService(contactId, req.user.id);
   res.status(204).send();
 };

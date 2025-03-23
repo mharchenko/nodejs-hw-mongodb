@@ -1,7 +1,7 @@
 import Contact from '../models/contact.js';
 import createError from 'http-errors';
 
-export const getAllContactsService = async (query) => {
+export const getAllContactsService = async (userId, query) => {
   const {
     page = 1,
     perPage = 10,
@@ -10,7 +10,7 @@ export const getAllContactsService = async (query) => {
     type,
     isFavourite,
   } = query;
-  const filter = {};
+  const filter = { userId };
 
   if (type) filter.contactType = type;
   if (isFavourite !== undefined) filter.isFavourite = isFavourite === 'true';
@@ -38,26 +38,52 @@ export const getAllContactsService = async (query) => {
   };
 };
 
-export const getContactByIdService = async (contactId) => {
-  const contact = await Contact.findById(contactId);
+export const getContactByIdService = async (contactId, userId) => {
+  // const contact = await Contact.findById(contactId);
+  // console.log('Service userId:', userId);
+  const contact = await Contact.findOne({ _id: contactId, userId });
   if (!contact) throw createError(404, 'Contact not found');
   return contact;
 };
 
-export const createContactService = async (data) => {
-  return await Contact.create(data);
+// export const createContactService = async (data) => {
+// return await Contact.create(data);
+export const createContactService = async (data, userId) => {
+  // console.log('Service userId:', userId);
+  return await Contact.create({ ...data, userId });
 };
 
-export const updateContactService = async (contactId, data) => {
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, data, {
-    new: true,
-  });
+// export const updateContactService = async (contactId, data) => {
+//   const updatedContact = await Contact.findByIdAndUpdate(contactId, data, {
+//     new: true,
+//   });
+//   if (!updatedContact) throw createError(404, 'Contact not found');
+//   return updatedContact;
+// };
+
+export const updateContactService = async (contactId, userId, data) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, userId },
+    data,
+    {
+      new: true,
+    },
+  );
   if (!updatedContact) throw createError(404, 'Contact not found');
   return updatedContact;
 };
 
-export const deleteContactService = async (contactId) => {
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+// export const deleteContactService = async (contactId) => {
+//   const deletedContact = await Contact.findByIdAndDelete(contactId);
+//   if (!deletedContact) throw createError(404, 'Contact not found');
+//   return deletedContact;
+// };
+
+export const deleteContactService = async (contactId, userId) => {
+  const deletedContact = await Contact.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
   if (!deletedContact) throw createError(404, 'Contact not found');
   return deletedContact;
 };
