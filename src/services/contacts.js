@@ -39,27 +39,14 @@ export const getAllContactsService = async (userId, query) => {
 };
 
 export const getContactByIdService = async (contactId, userId) => {
-  // const contact = await Contact.findById(contactId);
-  // console.log('Service userId:', userId);
   const contact = await Contact.findOne({ _id: contactId, userId });
   if (!contact) throw createError(404, 'Contact not found');
   return contact;
 };
 
-// export const createContactService = async (data) => {
-// return await Contact.create(data);
 export const createContactService = async (data, userId) => {
-  // console.log('Service userId:', userId);
   return await Contact.create({ ...data, userId });
 };
-
-// export const updateContactService = async (contactId, data) => {
-//   const updatedContact = await Contact.findByIdAndUpdate(contactId, data, {
-//     new: true,
-//   });
-//   if (!updatedContact) throw createError(404, 'Contact not found');
-//   return updatedContact;
-// };
 
 export const updateContactService = async (contactId, userId, data) => {
   const updatedContact = await Contact.findOneAndUpdate(
@@ -72,12 +59,6 @@ export const updateContactService = async (contactId, userId, data) => {
   if (!updatedContact) throw createError(404, 'Contact not found');
   return updatedContact;
 };
-
-// export const deleteContactService = async (contactId) => {
-//   const deletedContact = await Contact.findByIdAndDelete(contactId);
-//   if (!deletedContact) throw createError(404, 'Contact not found');
-//   return deletedContact;
-// };
 
 export const deleteContactService = async (contactId, userId) => {
   const deletedContact = await Contact.findOneAndDelete({

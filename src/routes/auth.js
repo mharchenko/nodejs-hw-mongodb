@@ -8,7 +8,6 @@ import {
   refreshController,
   registerController,
 } from '../controllers/auth.js';
-import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -29,5 +28,5 @@ router.post(
 
 router.post('/refresh', ctrlWrapper(refreshController));
 
-router.post('/logout', authenticate, ctrlWrapper(logoutController));
+router.post('/logout', ctrlWrapper(logoutController));
 export default router;
