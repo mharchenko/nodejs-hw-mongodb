@@ -1,5 +1,6 @@
 import express from 'express';
 import { Router } from 'express';
+import multer from 'multer';
 import {
   getAllContacts,
   getContactById,
@@ -19,12 +20,15 @@ const jsonParser = express.json();
 
 router.use(authenticate);
 
+const upload = multer({ dest: 'uploads/' });
+
 router.get('/', ctrlWrapper(getAllContacts));
 
 router.get('/:contactId', isValidId, ctrlWrapper(getContactById));
 
 router.post(
   '/',
+  upload.single('photo'),
   jsonParser,
   validateBody(contactSchema),
   ctrlWrapper(createContact),
@@ -33,6 +37,7 @@ router.post(
 router.patch(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   jsonParser,
   validateBody(updateContactSchema),
   ctrlWrapper(updateContact),

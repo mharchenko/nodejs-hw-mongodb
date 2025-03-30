@@ -1,3 +1,6 @@
+import cloudinary from 'cloudinary';
+import multer from 'multer';
+
 import Contact from '../models/contact.js';
 import createError from 'http-errors';
 
@@ -44,21 +47,21 @@ export const getContactByIdService = async (contactId, userId) => {
   return contact;
 };
 
-export const createContactService = async (data, userId) => {
-  return await Contact.create({ ...data, userId });
-};
+// export const createContactService = async (data, userId) => {
+//   return await Contact.create({ ...data, userId });
+// };
 
-export const updateContactService = async (contactId, userId, data) => {
-  const updatedContact = await Contact.findOneAndUpdate(
-    { _id: contactId, userId },
-    data,
-    {
-      new: true,
-    },
-  );
-  if (!updatedContact) throw createError(404, 'Contact not found');
-  return updatedContact;
-};
+// export const updateContactService = async (contactId, userId, data) => {
+//   const updatedContact = await Contact.findOneAndUpdate(
+//     { _id: contactId, userId },
+//     data,
+//     {
+//       new: true,
+//     },
+//   );
+//   if (!updatedContact) throw createError(404, 'Contact not found');
+//   return updatedContact;
+// };
 
 export const deleteContactService = async (contactId, userId) => {
   const deletedContact = await Contact.findOneAndDelete({
@@ -67,4 +70,34 @@ export const deleteContactService = async (contactId, userId) => {
   });
   if (!deletedContact) throw createError(404, 'Contact not found');
   return deletedContact;
+};
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export const createContactService = async (data, userId, file) => {
+  let photoUrl = null;
+  if (file) {
+    const result = await cloudinary.uploader.upload(file.path);
+    photoUrl = result.secure_url;
+  }
+  return await Contact.create({ ...data, userId, photo: photoUrl });
+};
+
+export const updateContactService = async (contactId, userId, data, file) => {
+  let photoUrl = null;
+  if (file) {
+    const result = await cloudinary.uploader.upload(file.path);
+    photoUrl = result.secure_url;
+  }
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, userId },
+    { ...data, photo: photoUrl },
+    { new: true },
+  );
+  if (!updatedContact) throw createError(404, 'Contact not found');
+  return updatedContact;
 };

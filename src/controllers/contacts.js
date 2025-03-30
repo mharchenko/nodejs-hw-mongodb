@@ -27,7 +27,11 @@ export const getContactById = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  const newContact = await createContactService(req.body, req.user.id);
+  const newContact = await createContactService(
+    req.body,
+    req.user.id,
+    req.file,
+  );
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
@@ -42,6 +46,7 @@ export const updateContact = async (req, res) => {
     contactId,
     req.user.id,
     req.body,
+    req.file,
   );
   res.status(200).json({
     status: 200,
