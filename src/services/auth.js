@@ -86,7 +86,7 @@ export async function sendResetEmail(email) {
   }
 
   const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-    expiresIn: '30m',
+    expiresIn: '5m',
   });
 
   const resetLink = `${process.env.APP_DOMAIN}/reset-password?token=${token}`;

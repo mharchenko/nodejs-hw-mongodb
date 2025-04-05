@@ -1,0 +1,39 @@
+type: object
+properties:
+  _id:
+    type: string
+    format: mongodb-id
+    example: '60d21b4667d0d8992e610c85'
+  name:
+    type: string
+    example: 'Jim Clark'
+  phoneNumber:
+    type: string
+    example: '+1234567890'
+  email:
+    type: string
+    format: email
+    example: 'jimmiClark@gmail.com'
+  isFavourite:
+    type: boolean
+    example: false
+  contactType:
+    type: string
+    enum: [work, home, personal]
+    example: 'personal'
+  userId:
+    type: string
+    format: mongodb-id
+    example: '60d21b4667d0d8992e610123'
+  photo:
+    type: string
+    format: uri
+    example: 'https://res.cloudinary.com/dfny1gl8i/image/upload/v1626790458/contacts/photo123.jpg'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2023-06-07T10:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2023-06-07T10:30:00.000Z'

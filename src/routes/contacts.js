@@ -27,7 +27,7 @@ router.get('/', ctrlWrapper(getAllContacts));
 router.get('/:contactId', isValidId, ctrlWrapper(getContactById));
 
 router.post(
-  '/',
+  '/post',
   upload.single('photo'),
   jsonParser,
   validateBody(contactSchema),
@@ -35,7 +35,7 @@ router.post(
 );
 
 router.patch(
-  '/:contactId',
+  '/:contactId/patch',
   isValidId,
   upload.single('photo'),
   jsonParser,
@@ -43,6 +43,6 @@ router.patch(
   ctrlWrapper(updateContact),
 );
 
-router.delete('/:contactId', isValidId, ctrlWrapper(deleteContact));
+router.delete('/:contactId/delete', isValidId, ctrlWrapper(deleteContact));
 
 export default router;
