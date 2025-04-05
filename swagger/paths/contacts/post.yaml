@@ -1,0 +1,98 @@
+post:
+  tags:
+    - Contacts
+  summary: Create contact
+  operationId: createContact
+  description: Creates a new contact
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: Contact data to create
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - name
+            - phoneNumber
+          properties:
+            name:
+              type: string
+              example: 'Jim Clark'
+              minLength: 3
+              maxLength: 20
+            phoneNumber:
+              type: string
+              example: '+1234567890'
+              minLength: 3
+              maxLength: 20
+            email:
+              type: string
+              format: email
+              example: 'jimmiClark@gmail.com'
+            isFavourite:
+              type: boolean
+              example: false
+            contactType:
+              type: string
+              enum: [work, home, personal]
+              example: 'personal'
+            photo:
+              type: string
+              format: binary
+  responses:
+    '201':
+      description: Contact created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 201
+              message:
+                type: string
+                example: 'Successfully created a contact!'
+              data:
+                $ref: '../../components/schemas/Contact.yaml'
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: '"name" is required'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: 'Unauthorized'
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: 'Internal Server Error'

@@ -1,0 +1,58 @@
+delete:
+  tags:
+    - Contacts
+  summary: Delete contact
+  operationId: deleteContact
+  description: Deletes a contact
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: contactId
+      in: path
+      description: ID of the contact to delete
+      required: true
+      schema:
+        type: string
+        format: mongodb-id
+  responses:
+    '204':
+      description: Contact deleted
+    '404':
+      description: Contact not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: 'Contact not found'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: 'Unauthorized'
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: 'Internal Server Error'

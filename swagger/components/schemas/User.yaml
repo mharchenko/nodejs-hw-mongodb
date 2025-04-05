@@ -1,0 +1,21 @@
+type: object
+properties:
+  _id:
+    type: string
+    format: mongodb-id
+    example: '60d21b4667d0d8992e610123'
+  name:
+    type: string
+    example: 'Jim Clark'
+  email:
+    type: string
+    format: email
+    example: 'jimmiClark@gmail.com'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2023-06-07T10:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2023-06-07T10:30:00.000Z'

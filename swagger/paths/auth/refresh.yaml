@@ -1,0 +1,71 @@
+post:
+  tags:
+    - Auth
+  summary: Refresh token
+  operationId: refreshToken
+  description: Refresh token
+  requestBody:
+    description: User refreshed token
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - email
+            - password
+          properties:
+            email:
+              type: string
+              format: email
+              example: 'jimmiClark@gmail.com'
+            password:
+              type: string
+              format: password
+              example: 'securePassword123'
+  responses:
+    '200':
+      description: User logged in
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: 'Successfully refreshed a session'
+              data:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: 0g9ulTO7xDTvR2k4UtLnCzIhUnQ0Id7LhH9IG2eT
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: 'User is not logged in'
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: 'Internal Server Error'

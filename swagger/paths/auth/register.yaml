@@ -1,0 +1,84 @@
+post:
+  tags:
+    - Auth
+  summary: Register user
+  operationId: registerUser
+  description: Register a new user
+  requestBody:
+    description: User registration data
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - email
+            - password
+          properties:
+            name:
+              type: string
+              example: 'Jim Clark'
+            email:
+              type: string
+              format: email
+              example: 'jimmiClark@gmail.com'
+            password:
+              type: string
+              format: password
+              example: 'securePassword123'
+  responses:
+    '201':
+      description: User registered
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 201
+              message:
+                type: string
+                example: 'Successfully registered a user!'
+              data:
+                $ref: '../../components/schemas/User.yaml'
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 400
+              message:
+                type: string
+                example: '"email" must be a valid email'
+    '409':
+      description: Email already in use
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 409
+              message:
+                type: string
+                example: 'Email in use'
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 500
+              message:
+                type: string
+                example: 'Internal Server Error'
