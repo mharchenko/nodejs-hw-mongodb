@@ -13,8 +13,9 @@ tags:
   - name: Auth
     description: Authentication and user management operations
 servers:
-  - url: http://localhost:3000
-    description: Local development server
+  # - url: http://localhost:3000
+  - url: https://contacts-app-my-hw-7.onrender.com
+    description: Development server
 paths:
   /contacts/{contactId}:
     $ref: '../swagger/paths/contacts/{contactId}/get.yaml'

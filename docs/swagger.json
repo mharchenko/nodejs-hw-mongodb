@@ -11,8 +11,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
-      "description": "Local development server"
+      "url": "https://contacts-app-my-hw-7.onrender.com",
+      "description": "Development server"
     }
   ],
   "tags": [
